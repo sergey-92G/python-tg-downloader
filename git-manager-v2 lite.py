@@ -327,11 +327,13 @@ def remote_management():
             footer = run_command(f"git remote remove {name}")
 
         elif selected == 3:
-            branch = run_command("git branch --show-current").strip()
-            if not branch:
-                branch = input("Введите имя ветки (по умолчанию main): ").strip() or "main"
-            footer = run_command(f"git pull origin {branch} --allow-unrelated-histories")
+            local_branch = run_command("git branch --show-current").strip()
+            if not local_branch:
+                local_branch = input("Введите локальную ветку (по умолчанию master): ").strip() or "master"
 
+            remote_branch = input(f"Удалённая ветка (по умолчанию {local_branch}): ").strip() or local_branch
+
+            footer = run_command(f"git push origin {local_branch}:{remote_branch}")
         elif selected == 4:
             branch = run_command("git branch --show-current").strip()
             if not branch:
