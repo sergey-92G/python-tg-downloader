@@ -306,10 +306,11 @@ def remote_management():
             "Отправить изменения (push)",
             "Ветки на удалённом GIT",
             "Клонировать репозиторий",
-            "Получить ветку с origin",
+            "Получить ветку с origin (fetch)",
             "Показать все удалённые ветки (локально)",
             "Отслеживать удалённую ветку",
             "Удалить ветку на удалённом сервере",
+            "Удалить привязку к origin",
             "Вернуться в главное меню"
         ]
         selected = display_menu(options, "\nУдалённые репозитории:", footer, selected)
@@ -327,18 +328,17 @@ def remote_management():
             footer = run_command(f"git remote remove {name}")
 
         elif selected == 3:
-            local_branch = run_command("git branch --show-current").strip()
-            if not local_branch:
-                local_branch = input("Введите локальную ветку (по умолчанию master): ").strip() or "master"
-
-            remote_branch = input(f"Удалённая ветка (по умолчанию {local_branch}): ").strip() or local_branch
-
-            footer = run_command(f"git push origin {local_branch}:{remote_branch}")
-        elif selected == 4:
             branch = run_command("git branch --show-current").strip()
             if not branch:
                 branch = input("Введите имя ветки (по умолчанию main): ").strip() or "main"
-            footer = run_command(f"git push origin {branch}")
+            footer = run_command(f"git pull origin {branch} --allow-unrelated-histories")
+
+        elif selected == 4:
+            local_branch = run_command("git branch --show-current").strip()
+            if not local_branch:
+                local_branch = input("Введите локальную ветку (по умолчанию master): ").strip() or "master"
+            remote_branch = input(f"Удалённая ветка (по умолчанию {local_branch}): ").strip() or local_branch
+            footer = run_command(f"git push origin {local_branch}:{remote_branch}")
 
         elif selected == 5:
             footer = run_command("git ls-remote --heads origin")
@@ -348,7 +348,7 @@ def remote_management():
             footer = run_command(f"git clone {url}")
 
         elif selected == 7:
-            branch = input("Имя удалённой ветки: ").strip()
+            branch = input("Имя удалённой ветки для fetch: ").strip()
             footer = run_command(f"git fetch origin {branch}")
 
         elif selected == 8:
@@ -364,8 +364,10 @@ def remote_management():
             footer = run_command(f"git push origin --delete {branch}")
 
         elif selected == 11:
-            return footer
+            footer = run_command("git branch --unset-upstream")
 
+        elif selected == 12:
+            return footer
 
 
 def browse_and_download_remote_file():
