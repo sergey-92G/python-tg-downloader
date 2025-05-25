@@ -21,3 +21,4 @@ eggs/
 .vscode/
 *.log
 config.json
+*.pyc
