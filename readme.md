@@ -1,6 +1,3 @@
-Вот готовый `README.md`, оформленный строго по предоставленному шаблону, для проекта [python-tg-downloader](https://github.com/sergey-92G/python-tg-downloader):
-
-````markdown
 # 📦 Telegram Media Downloader
 
 ## 📑 Оглавление
